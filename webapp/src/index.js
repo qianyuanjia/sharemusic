@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import {Provider} from 'react-redux';
-import {resetStyle} from '@/style/global.js';
-
+import {ResetStyle} from '@/style/global.js';
+import store from '@/store';
 ReactDOM.render(
-<Provider>
+<Provider store={store}>
+    <ResetStyle/>
     <App />
 </Provider>
 , document.getElementById('root'));
