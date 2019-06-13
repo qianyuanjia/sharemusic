@@ -13,6 +13,7 @@ export const InputWrapper=styled.div`
         margin:10px;
         display:inline-block;
         min-width:70px;
+        text-align:right;
     }
     >span:last-child{
         color:#E13530;
