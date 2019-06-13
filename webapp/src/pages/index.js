@@ -1,4 +1,13 @@
-import Home from './Home';
+import Loadable from 'react-loadable';
+import Loading from './Load';
+
+function createLoadableComponent(name){
+    return Loadable({
+        loader: () => import('./'+name),
+        loading: Loading,
+      });
+}
 export default {
-    Home
-} 
+    Home:createLoadableComponent('Home'),
+    Login:createLoadableComponent('Login')
+}
