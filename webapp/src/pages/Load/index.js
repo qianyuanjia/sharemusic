@@ -1,4 +1,5 @@
 import React from 'react';
+import {Loading} from './style';
 export default ()=>(
-    <div>加载中。。。</div>
+    <Loading />
 );

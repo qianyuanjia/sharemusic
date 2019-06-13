@@ -9,5 +9,5 @@ function createLoadableComponent(name){
 }
 export default {
     Home:createLoadableComponent('Home'),
-    Login:createLoadableComponent('Login')
+    Login:createLoadableComponent('Login'),
 }
