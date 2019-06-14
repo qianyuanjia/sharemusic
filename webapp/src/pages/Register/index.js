@@ -23,7 +23,7 @@ class Register extends Component{
         const {nickname,password,repassword,setInputVal}=this.props;
         return (
             <Wrapper>
-                <Message top="100px" content="书写成功"/>
+                <Message content="书写成功" type="error"/>
                 <InputWrapper>
                     <span>昵称</span>
                     <input name="nickname" type="text" 
