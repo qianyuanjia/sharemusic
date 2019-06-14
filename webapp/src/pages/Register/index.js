@@ -6,24 +6,75 @@ import {Message} from '@/components';
 class Register extends Component{
     constructor(props){
         super(props);
+        this.state={
+            showMessage:false,
+            showResMessage:false,
+            showJumpMessage:false
+        };
         this.submitForm=this.submitForm.bind(this);
     }
     submitForm(){
-        const {nickname,password,repassword}=this.props;
-        let nicknameRight=nickname.length>0 && nickname.length<7;
-        let passwordRight=password.length>0 && password.length<11;
-        let repasswordRight=repassword.length>0 && repassword===password;
-        if(nicknameRight && passwordRight && repasswordRight){
-            alert('ok')
+        const {resinfo,history}=this.props;
+        if(resinfo==="注册成功!"){
+            this.setState({
+                showJumpMessage:true
+            },()=>{
+                setTimeout(()=>{
+                    history.push('/login');
+                },1500)
+            })
         }else{
-            
+            const {nickname,password,repassword,setIsValid,registerUser}=this.props;
+            let nicknameRight=nickname.length>0 && nickname.length<7;
+            let passwordRight=password.length>0 && password.length<11;
+            let repasswordRight=repassword.length>0 && repassword===password;
+            let valid=nicknameRight && passwordRight && repasswordRight;
+            setIsValid(valid);
+            this.setState({
+                showMessage:false
+            },()=>{
+                this.setState({
+                    showMessage:!valid
+                });
+            })
+            if(valid){
+                this.setState({
+                    showResMessage:false
+                },()=>{
+                    this.setState({
+                        showResMessage:true
+                    });
+                    registerUser({
+                        nickname,password
+                    });
+                })
+               
+            }
         }
     }
     render(){
-        const {nickname,password,repassword,setInputVal}=this.props;
+        const {nickname,password,repassword,isvalid,resinfo,setInputVal,history}=this.props;
+        const {showMessage,showResMessage,showJumpMessage} = this.state;
+        let resMessage=null;
+        switch(resinfo){
+            case '用户名已存在!':
+            case '注册失败，请重试!':
+                resMessage=<Message content={resinfo} type="error"/>;
+                break;
+            case '注册成功!':
+                resMessage=<Message content={resinfo} />
+                setTimeout(()=>{
+                    history.push('/login');
+                },1500);
+                break;
+            default:
+                resMessage=null;
+        }
         return (
             <Wrapper>
-                <Message content="书写成功" type="error"/>
+                {showMessage && <Message content={isvalid?'':'填写错误，请检查！'} type={isvalid?'success':'error'}/>}
+                {showResMessage && resMessage}
+                {showJumpMessage && <Message content="您已注册，直接登陆即可！" />}
                 <InputWrapper>
                     <span>昵称</span>
                     <input name="nickname" type="text" 
@@ -67,17 +118,24 @@ const mapState=(state)=>{
     return {
         nickname:state.getIn(['register','nickname']),
         password:state.getIn(['register','password']),
-        repassword:state.getIn(['register','repassword'])
+        repassword:state.getIn(['register','repassword']),
+        isvalid:state.getIn(['register','isvalid']),
+        resinfo:state.getIn(['register','resinfo'])
     }
 }
 const mapDispatch=(dispatch)=>{
     return {
         setInputVal(ev){
-            const action=actionCreators.setInputVal({
+            dispatch(actionCreators.setInputVal({
                 key:ev.target.name,
                 val:ev.target.value
-            });
-            dispatch(action);
+            }));
+        },
+        setIsValid(bool){
+            dispatch(actionCreators.setIsValid(bool));
+        },
+        registerUser(user){
+            dispatch(actionCreators.registerUser(user));
         }
     }
 }
