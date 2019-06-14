@@ -14,29 +14,21 @@ class Register extends Component{
         this.submitForm=this.submitForm.bind(this);
     }
     submitForm(){
-        const {resinfo,history}=this.props;
+        const {nickname,resinfo,history}=this.props;
         if(resinfo==="注册成功!"){
             this.setState({
                 showJumpMessage:true
             },()=>{
                 setTimeout(()=>{
-                    history.push('/login');
+                    history.push({pathname:'/login',query:{nickname}});
                 },1500)
             })
         }else{
-            const {nickname,password,repassword,setIsValid,registerUser}=this.props;
+            const {password,repassword,registerUser}=this.props;
             let nicknameRight=nickname.length>0 && nickname.length<7;
             let passwordRight=password.length>0 && password.length<11;
             let repasswordRight=repassword.length>0 && repassword===password;
             let valid=nicknameRight && passwordRight && repasswordRight;
-            setIsValid(valid);
-            this.setState({
-                showMessage:false
-            },()=>{
-                this.setState({
-                    showMessage:!valid
-                });
-            })
             if(valid){
                 this.setState({
                     showResMessage:false
@@ -49,11 +41,19 @@ class Register extends Component{
                     });
                 })
                
+            }else{
+                this.setState({
+                    showMessage:false
+                },()=>{
+                    this.setState({
+                        showMessage:true
+                    });
+                })
             }
         }
     }
     render(){
-        const {nickname,password,repassword,isvalid,resinfo,setInputVal,history}=this.props;
+        const {nickname,password,repassword,resinfo,setInputVal,history}=this.props;
         const {showMessage,showResMessage,showJumpMessage} = this.state;
         let resMessage=null;
         switch(resinfo){
@@ -64,7 +64,7 @@ class Register extends Component{
             case '注册成功!':
                 resMessage=<Message content={resinfo} />
                 setTimeout(()=>{
-                    history.push('/login');
+                    history.push({pathname:'/login',query:{nickname}});
                 },1500);
                 break;
             default:
@@ -72,7 +72,7 @@ class Register extends Component{
         }
         return (
             <Wrapper>
-                {showMessage && <Message content={isvalid?'':'填写错误，请检查！'} type={isvalid?'success':'error'}/>}
+                {showMessage && <Message content='填写错误，请检查！' type='error'/>}
                 {showResMessage && resMessage}
                 {showJumpMessage && <Message content="您已注册，直接登陆即可！" />}
                 <InputWrapper>
@@ -119,7 +119,6 @@ const mapState=(state)=>{
         nickname:state.getIn(['register','nickname']),
         password:state.getIn(['register','password']),
         repassword:state.getIn(['register','repassword']),
-        isvalid:state.getIn(['register','isvalid']),
         resinfo:state.getIn(['register','resinfo'])
     }
 }
@@ -130,9 +129,6 @@ const mapDispatch=(dispatch)=>{
                 key:ev.target.name,
                 val:ev.target.value
             }));
-        },
-        setIsValid(bool){
-            dispatch(actionCreators.setIsValid(bool));
         },
         registerUser(user){
             dispatch(actionCreators.registerUser(user));

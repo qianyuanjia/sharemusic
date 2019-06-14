@@ -7,6 +7,7 @@ function App() {
           <Route path="/" exact component={Pages.Home}/>      
           <Route path="/home" exact component={Pages.Home}/>      
           <Route path="/register" exact component={Pages.Register}/>      
+          <Route path="/login" exact component={Pages.Login}/>      
       </BrowserRouter>
   );
 }

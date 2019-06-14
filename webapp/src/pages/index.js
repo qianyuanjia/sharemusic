@@ -10,4 +10,5 @@ function createLoadableComponent(name){
 export default {
     Home:createLoadableComponent('Home'),
     Register:createLoadableComponent('Register'),
+    Login:createLoadableComponent('Login')
 }
