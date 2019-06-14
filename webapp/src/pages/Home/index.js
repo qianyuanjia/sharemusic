@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 class Home extends Component{
-    componentDidMount(){
+    componentWillMount(){
         const {history}=this.props;
         axios.get('/curUser').then(res=>{
             let curUser=res.data;
-            console.log(curUser)
             if(!curUser){
                 history.push('/login');
             }
@@ -25,7 +24,6 @@ class Home extends Component{
 }
 const mapState=(state)=>{
     return {
-        curUser:state.getIn(['login','curUser'])
     }
 }
 const mapDispatch=()=>{
