@@ -1,34 +1,31 @@
 import React,{Component} from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import {commonCreators as actionCreators} from '@/store/reducers';
+import {Wrapper} from './style';
 
 class Home extends Component{
     componentWillMount(){
-        const {history}=this.props;
-        axios.get('/curUser').then(res=>{
-            let curUser=res.data;
-            if(!curUser){
-                history.push('/login');
-            }
-        }).catch(err=>{
-            history.push('/login');
-        })
+        const {history,getCurUser}=this.props;
+        getCurUser(history);
     }
     render(){
         return (
-            <div>
-                我是主页
-            </div>
+            <Wrapper>
+                hello
+            </Wrapper>
         );
     }
 }
 const mapState=(state)=>{
     return {
+        curuser:state.getIn(['common','curuser'])
     }
 }
-const mapDispatch=()=>{
+const mapDispatch=(dispatch)=>{
     return {
-
+        getCurUser(history){
+            dispatch(actionCreators.getCurUser(history));
+        }
     }
 }
 export default connect(mapState,mapDispatch)(Home);

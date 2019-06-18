@@ -23,7 +23,13 @@ class Login extends Component{
     submitLogin(){
         const {resinfo,history}=this.props;
         if(resinfo.includes('登陆成功')){
-            return history.push('/home');
+            return this.setState({
+                showResMessage:true
+            },()=>{
+                setTimeout(()=>{
+                    history.push('/home');
+                },1500)
+            })
         }
         const {nickname,password,requestLogin}=this.props;
         let nicknameRight=nickname.length>0 && nickname.length<7;
@@ -36,7 +42,7 @@ class Login extends Component{
                 this.setState({
                     showResMessage:true
                 });
-                requestLogin({nickname,password});
+                requestLogin({nickname,password},history);
             })
         }else{
             this.setState({
@@ -49,13 +55,8 @@ class Login extends Component{
         }
     }
     render(){
-        const {nickname,password,resinfo,setInputVal,history}=this.props;
+        const {nickname,password,resinfo,setInputVal}=this.props;
         const {showMessage,showResMessage}=this.state;
-        if(resinfo.includes('登陆成功')){
-            setTimeout(()=>{
-                history.push('/home');  
-            },1500);
-        }
         return (
         <Wrapper>
             {showMessage && <Message content='填写错误，请检查！' type="error"/>}
@@ -105,8 +106,8 @@ const mapDispatch=(dispatch)=>{
                 val:ev.target.value
             }));
         },
-        requestLogin(info){
-            dispatch(actionCreators.requestLogin(info));
+        requestLogin(info,history){
+            dispatch(actionCreators.requestLogin(info,history));
         }
     }
 }
