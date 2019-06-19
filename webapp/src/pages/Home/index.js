@@ -1,7 +1,8 @@
-import React,{Component} from 'react';
+import React,{Component,Fragment} from 'react';
 import { connect } from 'react-redux';
 import {commonCreators as actionCreators} from '@/store/reducers';
-import {Wrapper} from './style';
+import {} from './style';
+import {Header} from '@/components';
 
 class Home extends Component{
     componentWillMount(){
@@ -10,9 +11,9 @@ class Home extends Component{
     }
     render(){
         return (
-            <Wrapper>
-                hello
-            </Wrapper>
+            <Fragment>
+                <Header />
+            </Fragment>
         );
     }
 }
