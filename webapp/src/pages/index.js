@@ -1,10 +1,10 @@
 import Loadable from 'react-loadable';
-import Loading from './Load';
+import {Load} from '@/components';
 
 function createLoadableComponent(name){
     return Loadable({
         loader: () => import('./'+name),
-        loading: Loading,
+        loading: Load,
       });
 }
 export default {

@@ -23,7 +23,7 @@ class RadioGroup extends Component{
         const {styles,selects} = this.props;
         const {selected}=this.state;
         const radios=selects.map(item=>(
-            <RadioItem value={item.value} onClick={this.selectItem.bind(this,item.value)} key={item.value}>
+            <RadioItem onClick={this.selectItem.bind(this,item.value)} key={item.value}>
                 <i className={selected.includes(item.value)?'active':''}></i><span>{item.name}</span>
             </RadioItem>
         ));

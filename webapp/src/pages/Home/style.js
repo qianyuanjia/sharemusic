@@ -4,8 +4,12 @@ export const BodyWrapper=styled.div`
     max-width:980px;
     margin:0 auto;
     border:1px solid #D3D3D3;
+    padding-bottom:30px;
+    min-height:calc(100vh - 71px);
+    box-sizing:border-box;
     >header{
         padding:30px 0;
+        margin-bottom:30px;
     }
 `;
 export const SearchInput=styled.section`

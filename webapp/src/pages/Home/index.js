@@ -2,7 +2,7 @@ import React,{Component,Fragment} from 'react';
 import { connect } from 'react-redux';
 import {commonCreators as actionCreators} from '@/store/reducers';
 import {BodyWrapper,SearchInput,} from './style';
-import {Header,RadioGroup} from '@/components';
+import {Header,RadioGroup,AudioPlayer} from '@/components';
 
 class Home extends Component{
     constructor(props){
@@ -35,6 +35,9 @@ class Home extends Component{
                         </SearchInput>
                         <RadioGroup selects={sources} styles={{width:'500px',marginTop:'20px'}}/>
                     </header>
+                    <main>
+                        <AudioPlayer scale={100} />
+                    </main>
                 </BodyWrapper>
             </Fragment>
         );
