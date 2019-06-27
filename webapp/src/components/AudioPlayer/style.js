@@ -102,7 +102,7 @@ export const ListItem=styled.li`
     >div{
         overflow:hidden;
         max-width:380px;
-        white-space:no-wrap;
+        white-space:nowrap;
         text-overflow:ellipsis;
         >span:first-child{
             display:inline-block;
