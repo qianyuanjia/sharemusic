@@ -59,6 +59,13 @@ class AudioPlayer extends Component{
             });
         }
     }
+    changeVolume(ev){
+        const width=ev.target.offsetWidth;
+        const inWidth=ev.pageX-ev.target.offsetLeft;
+        const volume=inWidth/width;
+        const {config,changeAudioConfig}=this.props;
+        changeAudioConfig({audio:{...config,volume}})
+    }
     render(){
         const {config,changeAudioConfig,loadMoreSong,changeSong}=this.props;
         const {scale,songList,curSong,play,curSrc,volume,autoplay}=config;
@@ -101,7 +108,7 @@ class AudioPlayer extends Component{
                             </div>
                             <div>
                                 <i className="iconfont">&#xe627;</i>
-                                <ProgressBar styles={{width:'80px',height:'6px',display:'inline-block'}} percent={volume*100}/>
+                                <ProgressBar styles={{width:'80px',height:'6px',display:'inline-block'}} percent={volume*100} clickEv={this.changeVolume.bind(this)}/>
                             </div>
                         </section>
                         <ProgressBar styles={{height:'8px',marginTop:'15px'}} percent={percent}/>
