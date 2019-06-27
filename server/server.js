@@ -1,7 +1,8 @@
 var express=require('express');
 var bodyParser=require('body-parser');
 var fs=require('fs');
-var session = require('express-session')
+var session = require('express-session');
+var axios=require('axios');
 //创建应用
 var app=express();
 //中间件配置
@@ -51,6 +52,52 @@ app.post('/login',function(req,res){
 //获取当前用户
 app.get('/curUser',function(req,res){
     res.send(JSON.stringify(req.session.curUser));
+})
+//获取所有歌曲来源
+app.get('/getSources',function(req,res){
+    const sourceList=require('./sources.json');
+    res.send(sourceList);
+})
+
+app.get('/getSongList',function(req,res){
+    const {page,source,keywords,pageSize}=req.query;
+    const params={
+        aggr: 1,
+        cr: 1,
+        flag_qc: 0,
+        p: page,
+        n:pageSize,
+        w:keywords
+    };
+    axios.get('https://c.y.qq.com/soso/fcgi-bin/client_search_cp',{
+        params
+    }).then(function(result){
+        let resJson=JSON.parse(result.data.replace(/^callback\(|\)$/g,''));
+        res.send(resJson.data);
+    }).catch(err=>{
+        res.sendStatus(500);
+    })
+})
+
+app.get('/getSongUrl',function(req,res){
+    const {songmid}=req.query;
+    const params={
+        format:'json205361747',
+        platform:'yqq',
+        cid:'205361747',
+        guid:'126548448',
+        songmid,
+        filename:'C40'+songmid+'.m4a'
+    };
+    axios.get('https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg',{
+        params
+    }).then(result=>{
+        const data=result.data.data.items[0] || {};
+        let url=`http://ws.stream.qqmusic.qq.com/${params.filename}?fromtag=0&guid=${params.guid}&vkey=${data.vkey}`;
+        res.send(url);
+    }).catch(err=>{
+        res.sendStatus(500);
+    })
 })
 app.listen(4000,function(){
     console.log('\033[96m the server is running at 4000 \033[39m')

@@ -1,20 +1,34 @@
 import React,{Component} from 'react';
-import {Wrapper,HeadPic,PlayControls,SongList,ListItem} from './style';
+import {Wrapper,HeadPic,PlayControls,SongList,ListItem,LoadMore} from './style';
 import ProgressBar from '../ProgressBar';
+
 class AudioPlayer extends Component{
     render(){
-        const {scale}=this.props;
+        const {config,changeAudioConfig}=this.props;
+        const {scale,songList,curSong,play}=config;
+        const songs=songList.map((item,idx)=>(
+            <ListItem key={item.songmid}>
+                <div>
+                    <span>{idx+1}</span>
+                    <span>{item.songname}</span>
+                    <span>{item.singer.map(singer=>singer.name).join('，')}</span>
+                </div>
+                <i className="iconfont">&#xe713;</i>
+            </ListItem>
+        ));
+        const imgSrc=curSong.albumid?`http://imgcache.qq.com/music/photo/album_300/${curSong.albumid%100}/300_albumpic_${curSong.albumid}_0.jpg`:'';
         return (
             <Wrapper scale={scale}>
                 <header>
-                    <HeadPic scale={scale}/>
+                    <HeadPic scale={scale} src={imgSrc}/>
                     <PlayControls scale={scale}>
-                        <h2>爱存在</h2>
-                        <h3>王安石</h3>
+                        <h2>{curSong.songname}</h2>
+                        <h3>{curSong.singer?curSong.singer.map(singer=>singer.name).join('，'):''}</h3>
                         <section>
                             <div>
                                 <i className="iconfont">&#xe655;</i>
-                                <i className="iconfont">&#xe713;</i>
+                                {play?<i className="iconfont" onClick={changeAudioConfig.bind(null,{audio:{...config,play:false}})}>&#xe865;</i>
+                                :<i className="iconfont" onClick={changeAudioConfig.bind(null,{audio:{...config,play:true}})}>&#xe713;</i>}
                                 <i className="iconfont">&#xe654;</i>
                             </div>
                             <div>
@@ -32,16 +46,7 @@ class AudioPlayer extends Component{
                         </footer>
                     </PlayControls>
                 </header>
-                <SongList>
-                    <ListItem>
-                        <div>
-                            <span>1</span>
-                            <span>黄昏</span>
-                            <span>周传雄</span>
-                        </div>
-                        <i className="iconfont">&#xe865;</i>
-                    </ListItem>
-                </SongList>
+                {songs.length>0 && <SongList>{songs}<LoadMore>加载更多</LoadMore></SongList>}
             </Wrapper>
         );
     }

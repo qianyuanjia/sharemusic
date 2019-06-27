@@ -23,7 +23,7 @@ export const HeadPic=styled.div`
     height:100%;
     border-radius:${props=>getPx(props.scale,10)};
     box-shadow:0 0 10px 1px #666;
-    background:#20304A url(${HeadImg}) center no-repeat;
+    background:#20304A url(${props=>props.src || HeadImg}) center no-repeat;
     background-size:100% 100%;
     margin-right:${props=>getPx(props.scale,20)};
 `;
@@ -48,6 +48,9 @@ export const PlayControls=styled.div`
         font-size:16px;
 
         >div:first-child{
+            i{
+                cursor:pointer;
+            }
             i:nth-of-type(2){
                 margin:0 10px;
             }
@@ -87,7 +90,7 @@ export const ListItem=styled.li`
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding-bottom:7px;
+    padding:7px 0;
     border-bottom:1px solid;
     color:#ddd;
     font-size:14px;
@@ -99,5 +102,14 @@ export const ListItem=styled.li`
                 margin:0 10px;
             }
         }
+    }
+`;
+export const LoadMore=styled.li`
+    color:#fff;
+    text-align:center;
+    margin-top:15px;
+    cursor:pointer;
+    &:active{
+        color:#ccc;
     }
 `;

@@ -1,30 +1,19 @@
 import React,{Component} from 'react';
 import {Wrapper,RadioItem} from './style';
 class RadioGroup extends Component{
-    constructor(props){
-        super(props);
-        this.state={
-            selected:[]
-        };
-    }
     selectItem(val){
-        const {selected}=this.state;
-        if(selected.includes(val)){
-            this.setState({
-                selected:[]
-            })
+        const {value,selectAction} = this.props;
+        if(value===val){
+            selectAction('');
         }else{
-            this.setState({
-                selected:[val]
-            })
+            selectAction(val);
         }
     }
     render(){
-        const {styles,selects} = this.props;
-        const {selected}=this.state;
+        const {styles,selects,value} = this.props;
         const radios=selects.map(item=>(
             <RadioItem onClick={this.selectItem.bind(this,item.value)} key={item.value}>
-                <i className={selected.includes(item.value)?'active':''}></i><span>{item.name}</span>
+                <i className={value===item.value?'active':''}></i><span>{item.name}</span>
             </RadioItem>
         ));
         return (
