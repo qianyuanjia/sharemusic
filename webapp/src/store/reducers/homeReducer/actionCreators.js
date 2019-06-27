@@ -36,6 +36,7 @@ export const getSongList = () => {
         const curSource = state.getIn(['home', 'curSource']);
         const keywords = state.getIn(['home', 'keywords']);
         const audio = state.getIn(['home', 'audio']).toJS();
+        if(!keywords) return;
         axios.get('/getSongList', {
             params: {
                 source: curSource,

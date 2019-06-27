@@ -38,18 +38,18 @@ class AudioPlayer extends Component{
     }
     componentDidMount(){
         const {player}=this.state;
-        const {autoplay,songList,curSong}=this.props.config;
-        const {changeSong}=this.props;
         player.addEventListener("timeupdate", ()=>{ 
             this.setState({percent:player.currentTime/player.duration*100})
         });
-        if(!autoplay){
+        player.addEventListener("ended", ()=>{ 
+            const {autoplay,songList,curSong}=this.props.config;
+            const {changeSong}=this.props;
             const len=songList.length;
             const index=songList.findIndex(item=>curSong.songmid===item.songmid);
-            player.addEventListener("ended", ()=>{ 
+            if(!autoplay){
                 changeSong(songList[index<len-1?index+1:0],this.cantPlay.bind(this));
-            });
-        }
+            }
+        });
     }
     changeVolume(ev){
         const width=ev.target.offsetWidth;
