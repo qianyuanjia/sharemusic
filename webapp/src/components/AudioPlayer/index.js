@@ -17,13 +17,7 @@ class AudioPlayer extends Component{
     startPlay(){
         const {config,changeAudioConfig}=this.props; 
         if(config.curSrc.slice(-1)==="="){
-            this.setState({
-                showMessage:false
-            },()=>{
-                this.setState({
-                    showMessage:true
-                });
-            })
+           this.cantPlay();
         }else{
             changeAudioConfig.call(null,{audio:{...config,play:true}});
         }
@@ -50,12 +44,8 @@ class AudioPlayer extends Component{
             this.setState({percent:player.currentTime/player.duration*100})
         });
         if(!autoplay){
-            let index=0;
             const len=songList.length;
-            songList.map((item,idx)=>{
-                if(curSong.songmid===item.songmid) index=idx;
-                return;
-            });
+            const index=songList.findIndex(item=>curSong.songmid===item.songmid);
             player.addEventListener("ended", ()=>{ 
                 changeSong(songList[index<len-1?index+1:0],this.cantPlay.bind(this));
             });
@@ -90,7 +80,7 @@ class AudioPlayer extends Component{
                         <span>{item.songname}</span>
                         <span>{item.singer.map(singer=>singer.name).join('，')}</span>
                     </div>
-                    {curSong.songmid===item.songmid?<i className="iconfont">&#xe865;</i>:<i className="iconfont">&#xe713;</i>}
+                    {curSong.songmid===item.songmid && play?<i className="iconfont">&#xe865;</i>:<i className="iconfont">&#xe713;</i>}
                 </ListItem>
             )
         });
