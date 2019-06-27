@@ -87,12 +87,13 @@ app.get('/getSongUrl',function(req,res){
         cid:'205361747',
         guid:'126548448',
         songmid,
-        filename:'C40'+songmid+'.m4a'
+        filename:'C400'+songmid+'.m4a'
     };
     axios.get('https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg',{
         params
     }).then(result=>{
         const data=result.data.data.items[0] || {};
+        console.log(data)
         let url=`http://ws.stream.qqmusic.qq.com/${params.filename}?fromtag=0&guid=${params.guid}&vkey=${data.vkey}`;
         res.send(url);
     }).catch(err=>{

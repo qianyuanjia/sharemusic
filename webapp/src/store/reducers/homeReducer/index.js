@@ -10,7 +10,9 @@ let initialState=fromJS({
         curSong:{},
         page:1,
         pageSize:5,
-        scale:100
+        scale:100,
+        curSrc:'',
+        volume:0.5,
     }
 });
 export default (state=initialState,action)=>{

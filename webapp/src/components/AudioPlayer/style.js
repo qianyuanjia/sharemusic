@@ -94,6 +94,7 @@ export const ListItem=styled.li`
     border-bottom:1px solid;
     color:#ddd;
     font-size:14px;
+    cursor:pointer;
     >div{
         >span:first-child{
             display:inline-block;

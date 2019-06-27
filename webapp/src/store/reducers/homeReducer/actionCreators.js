@@ -30,7 +30,7 @@ export const changeSource = (val) => {
         payLoad: val
     }
 }
-export const getSongList = (replaceAll = true) => {
+export const getSongList = () => {
     return (dispatch, getState) => {
         const state = getState();
         const curSource = state.getIn(['home', 'curSource']);
@@ -40,20 +40,42 @@ export const getSongList = (replaceAll = true) => {
             params: {
                 source: curSource,
                 keywords,
-                page:audio.page,
-                pageSize:audio.pageSize
+                page: audio.page,
+                pageSize: audio.pageSize
             }
         }).then(res => {
-            if (replaceAll) {
-                dispatch({
-                    type: SET_AUDIO_CONFIG,
-                    payLoad: {
-                        audio: fromJS({
-                            ...audio,
-                            songList: res.data.song.list,
-                            curSong: res.data.song.list[0] || {}
-                        })
+            const songList = res.data.song.list;
+            const firstSong = songList[0] || {};
+            if (firstSong.songmid) {
+                axios.get('/getSongUrl', {
+                    params: {
+                        songmid: firstSong.songmid
                     }
+                }).then(res => {
+                    dispatch({
+                        type: SET_AUDIO_CONFIG,
+                        payLoad: {
+                            audio: fromJS({
+                                ...audio,
+                                songList: songList,
+                                curSong: firstSong,
+                                curSrc: res.data
+                            })
+                        }
+                    })
+                    console.log(res.data)
+                }).catch(err => {
+                    console.log(err)
+                    dispatch({
+                        type: SET_AUDIO_CONFIG,
+                        payLoad: {
+                            audio: fromJS({
+                                ...audio,
+                                songList: songList,
+                                curSong: firstSong
+                            })
+                        }
+                    })
                 })
             } else {
                 dispatch({
@@ -61,7 +83,8 @@ export const getSongList = (replaceAll = true) => {
                     payLoad: {
                         audio: fromJS({
                             ...audio,
-                            songList: audio.songList.concat(res.data.song.list)
+                            songList: songList,
+                            curSong: firstSong
                         })
                     }
                 })
@@ -69,14 +92,14 @@ export const getSongList = (replaceAll = true) => {
         })
     }
 }
-export const changeAudioConfig =(config)=>{
+export const changeAudioConfig = (config) => {
     return {
-        type:SET_AUDIO_CONFIG,
-        payLoad:fromJS(config)
+        type: SET_AUDIO_CONFIG,
+        payLoad: fromJS(config)
     }
 }
-export const loadMoreSong=()=>{
-    return (dispatch,getState)=>{
+export const loadMoreSong = () => {
+    return (dispatch, getState) => {
         const state = getState();
         const audio = state.getIn(['home', 'audio']).toJS();
         const keywords = state.getIn(['home', 'keywords']);
@@ -85,22 +108,54 @@ export const loadMoreSong=()=>{
             params: {
                 source: curSource,
                 keywords,
-                page:audio.page+1,
-                pageSize:audio.pageSize
+                page: audio.page + 1,
+                pageSize: audio.pageSize
             }
         }).then(res => {
-            
+
+            dispatch({
+                type: SET_AUDIO_CONFIG,
+                payLoad: {
+                    audio: fromJS({
+                        ...audio,
+                        page: audio.page + 1,
+                        songList: audio.songList.concat(res.data.song.list)
+                    })
+                }
+            })
+        })
+
+    }
+}
+
+export const changeSong = (song,cantPlay) => {
+    return (dispatch, getState) => {
+        const state = getState();
+        const audio = state.getIn(['home', 'audio']).toJS();
+        axios.get('/getSongUrl', {
+            params: {
+                songmid: song.songmid
+            }
+        }).then(res => {
+            if(res.data.slice(-1)==="="){
+                cantPlay();
+            }else{
                 dispatch({
                     type: SET_AUDIO_CONFIG,
                     payLoad: {
                         audio: fromJS({
                             ...audio,
-                            page:audio.page+1,
-                            songList: audio.songList.concat(res.data.song.list)
+                            curSong: song,
+                            play: true,
+                            curSrc: res.data
                         })
                     }
                 })
+            }
+            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
         })
-
+       
     }
 }

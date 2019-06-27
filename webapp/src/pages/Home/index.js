@@ -16,7 +16,7 @@ class Home extends Component{
         getSources();
     }
     render(){
-        const {keywords,sources,curSource,audio,setKeyWord,changeSource,getSongList,changeAudioConfig,loadMoreSong}=this.props;
+        const {keywords,sources,curSource,audio,setKeyWord,changeSource,getSongList,changeAudioConfig,loadMoreSong,changeSong}=this.props;
         const audioConfig=audio.toJS();
         return (
             <Fragment>
@@ -31,7 +31,7 @@ class Home extends Component{
                     </header>
                     <main>
                         {audioConfig.songList.length>0 && <AudioPlayer config={audioConfig} 
-                        changeAudioConfig={changeAudioConfig} loadMoreSong={loadMoreSong}/>}
+                        changeAudioConfig={changeAudioConfig} loadMoreSong={loadMoreSong} changeSong={changeSong}/>}
                     </main>
                 </BodyWrapper>
             </Fragment>
@@ -71,6 +71,9 @@ const mapDispatch=(dispatch)=>{
         },
         loadMoreSong(){
             dispatch(homeActionCreators.loadMoreSong());
+        },
+        changeSong(song,cantPlay){
+            dispatch(homeActionCreators.changeSong(song,cantPlay));
         }
     }
 }
