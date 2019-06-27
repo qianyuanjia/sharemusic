@@ -72,6 +72,10 @@ export const PlayControls=styled.div`
             i{
                 margin-left:15px;
                 font-size:16px;
+                cursor:pointer;
+                &.active{
+                    color:#0ff;
+                }
             }
         }
     }

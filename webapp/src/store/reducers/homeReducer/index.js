@@ -13,6 +13,7 @@ let initialState=fromJS({
         scale:100,
         curSrc:'',
         volume:0.5,
+        autoplay:false
     }
 });
 export default (state=initialState,action)=>{

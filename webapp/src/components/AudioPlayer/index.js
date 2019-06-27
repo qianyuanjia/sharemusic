@@ -7,7 +7,8 @@ class AudioPlayer extends Component{
         super(props);
         this.state={
             showMessage:false,
-            player:new Audio()
+            player:new Audio(),
+            percent:0
         };
         this.startPlay=this.startPlay.bind(this);
     }
@@ -39,24 +40,49 @@ class AudioPlayer extends Component{
         let secs=(seconds%60).toString().padStart(2,'0');
         return minutes+':'+secs;
     }
+    componentDidMount(){
+        const {player}=this.state;
+        const {autoplay,songList,curSong}=this.props.config;
+        const {changeSong}=this.props;
+        player.addEventListener("timeupdate", ()=>{ 
+            this.setState({percent:player.currentTime/player.duration*100})
+        });
+        if(!autoplay){
+            let index=0;
+            const len=songList.length;
+            songList.map((item,idx)=>{
+                if(curSong.songmid===item.songmid) index=idx;
+                return;
+            });
+            player.addEventListener("ended", ()=>{ 
+                changeSong(songList[index<len-1?index+1:0],this.cantPlay.bind(this));
+            });
+        }
+    }
     render(){
         const {config,changeAudioConfig,loadMoreSong,changeSong}=this.props;
-        const {scale,songList,curSong,play,curSrc,volume}=config;
-        const {showMessage,player}=this.state;
-        const songs=songList.map((item,idx)=>(
-            <ListItem key={item.songmid} onClick={changeSong.bind(null,item,this.cantPlay.bind(this))}>
-                <div>
-                    <span>{idx+1}</span>
-                    <span>{item.songname}</span>
-                    <span>{item.singer.map(singer=>singer.name).join('，')}</span>
-                </div>
-                {curSong.songmid===item.songmid?<i className="iconfont">&#xe865;</i>:<i className="iconfont">&#xe713;</i>}
-            </ListItem>
-        ));
+        const {scale,songList,curSong,play,curSrc,volume,autoplay}=config;
+        const {showMessage,player,percent}=this.state;
+        let index=0;
+        const len=songList.length;
+        const songs=songList.map((item,idx)=>{
+            if(curSong.songmid===item.songmid) index=idx;
+            return (
+                <ListItem key={item.songmid} onClick={changeSong.bind(null,item,this.cantPlay.bind(this))}>
+                    <div>
+                        <span>{idx+1}</span>
+                        <span>{item.songname}</span>
+                        <span>{item.singer.map(singer=>singer.name).join('，')}</span>
+                    </div>
+                    {curSong.songmid===item.songmid?<i className="iconfont">&#xe865;</i>:<i className="iconfont">&#xe713;</i>}
+                </ListItem>
+            )
+        });
         const imgSrc=curSong.albumid?`http://imgcache.qq.com/music/photo/album_300/${curSong.albumid%100}/300_albumpic_${curSong.albumid}_0.jpg`:'';
         
-        player.src=curSrc;
+        if(curSrc!==player.src) player.src=curSrc;
         player.volume=volume;
+        player.autoplay=autoplay;
         play?player.play():player.pause();
         return (
             <Wrapper scale={scale}>
@@ -68,23 +94,25 @@ class AudioPlayer extends Component{
                         <h3>{curSong.singer?curSong.singer.map(singer=>singer.name).join('，'):''}</h3>
                         <section>
                             <div>
-                                <i className="iconfont">&#xe655;</i>
+                                <i className="iconfont" onClick={changeSong.bind(null,songList[index>0?index-1:len-1],this.cantPlay.bind(this))}>&#xe655;</i>
                                 {play?<i className="iconfont" onClick={changeAudioConfig.bind(null,{audio:{...config,play:false}})}>&#xe865;</i>
                                 :<i className="iconfont" onClick={this.startPlay}>&#xe713;</i>}
-                                <i className="iconfont">&#xe654;</i>
+                                <i className="iconfont" onClick={changeSong.bind(null,songList[index<len-1?index+1:0],this.cantPlay.bind(this))}>&#xe654;</i>
                             </div>
                             <div>
                                 <i className="iconfont">&#xe627;</i>
                                 <ProgressBar styles={{width:'80px',height:'6px',display:'inline-block'}} percent={volume*100}/>
                             </div>
                         </section>
-                        <ProgressBar styles={{height:'8px',marginTop:'15px'}} percent={50}/>
+                        <ProgressBar styles={{height:'8px',marginTop:'15px'}} percent={percent}/>
                         <footer>
                             <span>{this.transTime(~~player.currentTime)}</span>
                             <p>
                                 <span>{this.transTime(~~player.duration)}</span>
-                                <i className="iconfont">&#xe66c;</i> 
-                                <i className="iconfont">&#xe625;</i> 
+                                <i  className={autoplay?'active iconfont':'iconfont'}
+                                 onClick={changeAudioConfig.bind(null,{audio:{...config,autoplay:true}})}>&#xe66c;</i> 
+                                <i  className={autoplay?'iconfont':'active iconfont'}
+                                onClick={changeAudioConfig.bind(null,{audio:{...config,autoplay:false}})}>&#xe625;</i> 
                             </p>
                         </footer>
                     </PlayControls>
