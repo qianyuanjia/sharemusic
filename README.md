@@ -13,5 +13,10 @@ a website for sharing music
 链接。
 ```
 
-
+```
+项目启动方式
+进入项目根目录后，安装完前后端所有依赖后，进入到webapp目录下，先运行npm run serve启动
+后台服务，之后运行npm run start 启动前端项目即可。正常注册登录之后就可以在线搜索歌曲
+和播放了。
+```
 
