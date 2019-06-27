@@ -4,7 +4,7 @@ import ProgressBar from '../ProgressBar';
 
 class AudioPlayer extends Component{
     render(){
-        const {config,changeAudioConfig}=this.props;
+        const {config,changeAudioConfig,loadMoreSong}=this.props;
         const {scale,songList,curSong,play}=config;
         const songs=songList.map((item,idx)=>(
             <ListItem key={item.songmid}>
@@ -46,7 +46,7 @@ class AudioPlayer extends Component{
                         </footer>
                     </PlayControls>
                 </header>
-                {songs.length>0 && <SongList>{songs}<LoadMore>加载更多</LoadMore></SongList>}
+                {songs.length>0 && <SongList>{songs}<LoadMore onClick={loadMoreSong}>加载更多</LoadMore></SongList>}
             </Wrapper>
         );
     }

@@ -75,3 +75,32 @@ export const changeAudioConfig =(config)=>{
         payLoad:fromJS(config)
     }
 }
+export const loadMoreSong=()=>{
+    return (dispatch,getState)=>{
+        const state = getState();
+        const audio = state.getIn(['home', 'audio']).toJS();
+        const keywords = state.getIn(['home', 'keywords']);
+        const curSource = state.getIn(['home', 'curSource']);
+        axios.get('/getSongList', {
+            params: {
+                source: curSource,
+                keywords,
+                page:audio.page+1,
+                pageSize:audio.pageSize
+            }
+        }).then(res => {
+            
+                dispatch({
+                    type: SET_AUDIO_CONFIG,
+                    payLoad: {
+                        audio: fromJS({
+                            ...audio,
+                            page:audio.page+1,
+                            songList: audio.songList.concat(res.data.song.list)
+                        })
+                    }
+                })
+        })
+
+    }
+}
