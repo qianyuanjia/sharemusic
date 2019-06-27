@@ -20,3 +20,12 @@ a website for sharing music
 和播放了。
 ```
 
+
+![注册页面](./images/reg.png)
+
+
+![登录页面](./images/log.png)
+
+
+![播放器页面](./images/player.png)
+
