@@ -100,6 +100,10 @@ export const ListItem=styled.li`
     font-size:14px;
     cursor:pointer;
     >div{
+        overflow:hidden;
+        max-width:380px;
+        white-space:no-wrap;
+        text-overflow:ellipsis;
         >span:first-child{
             display:inline-block;
             min-width:2em;

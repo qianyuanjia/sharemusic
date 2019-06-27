@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Wrapper =styled.div`
     margin:0 auto;
     text-align:center;
+    white-space:no-wrap;
 `;
 export const RadioItem=styled.div`
     display:inline-flex;

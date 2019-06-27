@@ -11,6 +11,8 @@ class AudioPlayer extends Component{
             percent:0
         };
         this.startPlay=this.startPlay.bind(this);
+        this.changeVolume=this.changeVolume.bind(this);
+        this.changeTime=this.changeTime.bind(this);
     }
     startPlay(){
         const {config,changeAudioConfig}=this.props; 
@@ -66,6 +68,13 @@ class AudioPlayer extends Component{
         const {config,changeAudioConfig}=this.props;
         changeAudioConfig({audio:{...config,volume}})
     }
+    changeTime(ev){
+        const width=ev.target.offsetWidth;
+        const inWidth=ev.pageX-ev.target.offsetLeft;
+        const count=inWidth/width;
+        const {player}=this.state;
+        player.currentTime=count*player.duration;
+    }
     render(){
         const {config,changeAudioConfig,loadMoreSong,changeSong}=this.props;
         const {scale,songList,curSong,play,curSrc,volume,autoplay}=config;
@@ -108,10 +117,10 @@ class AudioPlayer extends Component{
                             </div>
                             <div>
                                 <i className="iconfont">&#xe627;</i>
-                                <ProgressBar styles={{width:'80px',height:'6px',display:'inline-block'}} percent={volume*100} clickEv={this.changeVolume.bind(this)}/>
+                                <ProgressBar styles={{width:'80px',height:'6px',display:'inline-block'}} percent={volume*100} clickEv={this.changeVolume}/>
                             </div>
                         </section>
-                        <ProgressBar styles={{height:'8px',marginTop:'15px'}} percent={percent}/>
+                        <ProgressBar styles={{height:'8px',marginTop:'15px'}} percent={percent} clickEv={this.changeTime}/>
                         <footer>
                             <span>{this.transTime(~~player.currentTime)}</span>
                             <p>
