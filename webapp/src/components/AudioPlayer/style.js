@@ -35,6 +35,10 @@ export const PlayControls=styled.div`
         font-weight:900;
         font-size:16px;
         margin-bottom:8px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        max-width:${props=>getPx(props.scale,350)};
     }
     >h3{
         color:#CCCCC8;
