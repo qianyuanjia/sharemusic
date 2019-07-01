@@ -3,8 +3,10 @@ var bodyParser=require('body-parser');
 var fs=require('fs');
 var session = require('express-session');
 var axios=require('axios');
+var http=require('http');
 //创建应用
 var app=express();
+var server=http.createServer(app);
 //中间件配置
 app.use(bodyParser.urlencoded({
     extended: true
@@ -48,6 +50,11 @@ app.post('/login',function(req,res){
         }
     }
     res.send({code:403,data:'登陆失败'});
+})
+//退出登陆
+app.post('/logout',function(req,res){
+    req.session.curUser='';
+    res.sendStatus(200);
 })
 //获取当前用户
 app.get('/curUser',function(req,res){
@@ -100,6 +107,6 @@ app.get('/getSongUrl',function(req,res){
         res.sendStatus(500);
     })
 })
-app.listen(4000,function(){
+server.listen(4000,function(){
     console.log('\033[96m the server is running at 4000 \033[39m')
 })

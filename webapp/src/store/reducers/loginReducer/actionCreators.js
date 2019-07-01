@@ -10,10 +10,10 @@ export const requestLogin=(data,history)=>{
                     history.push('/home');
                 },1500);
             }else if(res.data.code===403){
-                dispatch({type:SET_RES_MESSAGE,payLoad:{msg:'用户名或密码错误！'}})
+                dispatch({type:SET_RES_MESSAGE,payLoad:{msg:'用户名或密码错误！'}});
             }
         }).catch(err=>{
-            dispatch({type:SET_RES_MESSAGE,payLoad:{msg:'未知错误，请重试！'}})
+            dispatch({type:SET_RES_MESSAGE,payLoad:{msg:'未知错误，请重试！'}});
         })
     }
 }

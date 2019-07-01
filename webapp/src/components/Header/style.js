@@ -50,3 +50,7 @@ export const BackRegister=styled.a.attrs({href:'/register'})`
     padding:6px 15px;
     border-radius:20% / 50%;
 `;
+export const Logout=styled.span`
+    margin-left:20px;
+    cursor:pointer;
+`;

@@ -16,11 +16,11 @@ class Home extends Component{
         getSources();
     }
     render(){
-        const {keywords,sources,curSource,audio,setKeyWord,changeSource,getSongList,changeAudioConfig,loadMoreSong,changeSong}=this.props;
+        const {curuser,keywords,sources,curSource,audio,setKeyWord,changeSource,getSongList,changeAudioConfig,loadMoreSong,changeSong,logout,history}=this.props;
         const audioConfig=audio.toJS();
         return (
             <Fragment>
-                <Header />
+                <Header curuser={curuser} logout={logout.bind(null,history)}/>
                 <BodyWrapper>
                     <header>
                         <SearchInput>
@@ -52,6 +52,9 @@ const mapDispatch=(dispatch)=>{
         getCurUser(history){
             dispatch(commonActionCreators.getCurUser(history));
         },
+        logout(history){
+            dispatch(commonActionCreators.logout(history));
+        },
         setKeyWord(ev){
             dispatch(homeActionCreators.setKeyWord(ev.target.value));
         },
@@ -74,7 +77,7 @@ const mapDispatch=(dispatch)=>{
         },
         changeSong(song,cantPlay){
             dispatch(homeActionCreators.changeSong(song,cantPlay));
-        }
+        },
     }
 }
 export default connect(mapState,mapDispatch)(Home);

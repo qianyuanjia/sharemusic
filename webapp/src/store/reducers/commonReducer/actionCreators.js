@@ -14,3 +14,15 @@ export const getCurUser=(history)=>{
         })
     }
 }
+
+export const logout=(history)=>{
+    return dispatch=>{
+        axios.get('/logout').then(res=>{
+            history.push('/login');
+            dispatch({type:SET_CUR_USER,payLoad:''});
+        }).catch(err=>{
+            history.push('/login');
+            dispatch({type:SET_CUR_USER,payLoad:''});
+        })
+    }
+}
