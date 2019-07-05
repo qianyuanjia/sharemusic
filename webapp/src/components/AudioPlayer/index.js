@@ -52,15 +52,15 @@ class AudioPlayer extends Component{
         });
     }
     changeVolume(ev){
-        const width=ev.target.offsetWidth;
-        const inWidth=ev.pageX-ev.target.offsetLeft;
+        const width=ev.currentTarget.offsetWidth;
+        const inWidth=ev.pageX-ev.currentTarget.offsetLeft;
         const volume=inWidth/width;
         const {config,changeAudioConfig}=this.props;
         changeAudioConfig({audio:{...config,volume}})
     }
     changeTime(ev){
-        const width=ev.target.offsetWidth;
-        const inWidth=ev.pageX-ev.target.offsetLeft;
+        const width=ev.currentTarget.offsetWidth;
+        const inWidth=ev.pageX-ev.currentTarget.offsetLeft;
         const count=inWidth/width;
         const {player}=this.state;
         player.currentTime=count*player.duration;
